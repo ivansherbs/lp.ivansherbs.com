@@ -14,29 +14,52 @@ Process Stripe webhook events with Netlify Functions to handle fulfillment
 
 - Node >= 10
 - Netlify CLI
-- Stripe CLI
 
-Follow the steps below to run locally
+### Setup your Netlify environment
 
-#### 1. Clone and configure the sample
+1. Create a site by running `ntl init`
+
+2. In the Settings -> Build & deploy -> Environment add the following environment variables:
+
+```
+STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
+STRIPE_SECRET_KEY=<replace-with-your-secret-key>
+MY_AWS_ACCESS_KEY_ID=<your-aws-access-key>
+MY_AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+```
+
+### Steps to run the code locally
+
+1. Clone and configure the sample
 
 ```shell
 git clone https://github.com/thekizoch/trialcheckout
 ```
 
-You will need a Stripe account in order to run. Once you set up your account, go to the Stripe developer dashboard to find your API keys.
+2. Login into your Netlify account from the CLI
 
+Make sure you have `netlify-cli` module installed globally (`npm i -g netlify-cli`), then run:
+
+```shell
+ntl login
 ```
-STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
-STRIPE_SECRET_KEY=<replace-with-your-secret-key>
+
+Login and allow acess from your browser.
+
+
+3. Link the current repo to the Netlify site
+
+```shell
+ntl link --id <site_api_id>
 ```
 
-### 2. Run Netlify Functions locally
+where `site_api_id` is under Settings -> General -> API ID
 
-You can run the Netlify Functions locally with Netlify Dev:
+4. Run Netlify CLI locally
 
-npm run functions
+```shell
 netlify dev
+```
 
 # Work in progress
 
@@ -48,7 +71,6 @@ https://www.dferber.de/how-to-write-files-to-aws-s3-from-netlify-functions/
 What has been done:
 - AWS keys set in netlify for private S3 bucket data.ivansherbs.Commerce
 - test upload and download functions written for an undefined file.
-
 
 What needs to be done:
 - Create a Zapier function that calls the read function test-download.js to process email sending.
