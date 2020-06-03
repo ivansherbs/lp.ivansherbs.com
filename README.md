@@ -1,33 +1,37 @@
-#Trial Checkout Landing Page
+# Trial Checkout Landing Page
 
 Use Stripe Checkout with Netlify Functions to sell your products online.
 
-##Features:
+## Features
+
 Load products from a JSON product catalogue
 Create Checkout Sessions with Netlify Functions
 Process Stripe webhook events with Netlify Functions to handle fulfillment
 
-##How to run locally
-###Prerequisites
+## How to run locally
+
+### Prerequisites
+
 - Node >= 10
 - Netlify CLI
 - Stripe CLI
 
 Follow the steps below to run locally
 
-####1. Clone and configure the sample
+#### 1. Clone and configure the sample
 
+```shell
 git clone https://github.com/thekizoch/trialcheckout
-Copy the .env.example file into a file named .env in the functions folder. For example:
-
-cp .env.example .env
+```
 
 You will need a Stripe account in order to run. Once you set up your account, go to the Stripe developer dashboard to find your API keys.
 
+```
 STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
 STRIPE_SECRET_KEY=<replace-with-your-secret-key>
+```
 
-###2. Run Netlify Functions locally:
+### 2. Run Netlify Functions locally
 
 You can run the Netlify Functions locally with Netlify Dev:
 
