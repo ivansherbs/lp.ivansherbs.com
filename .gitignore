@@ -1,2 +1,11 @@
+# Node
 node_modules
+
+# Netlify
 .netlify
+
+# Vim
+*.sw?
+
+# Mac
+.DS_Store
