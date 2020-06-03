@@ -7,18 +7,17 @@ exports.handler = async (event, context) => {
   })
 
   try {
-    const result = await s3
-      .upload({
+    const result = await s3.upload({
         // The bucket name
         Bucket: "data.ivansherbs.com",
         // The key/name of your file
-        Key: `name-of-your-file.json`,
+        Key: "hello-world.txt",
         // The contents of your file
-        Body: JSON.stringify({ hello: "world" }),
+        Body: "Hello World!",
         // The access control
         ACL: "private",
         ContentEncoding: "utf8", // required
-        ContentType: `application/json`,
+        ContentType: "text/html",
       })
       .promise()
 
