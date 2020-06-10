@@ -1,44 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>submit demo</title>
-  <style>
-  p {
-    margin: 0;
-    color: blue;
-  }
-  div,p {
-    margin-left: 10px;
-  }
-  span {
-    color: red;
-  }
-  </style>
-  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-</head>
-<body>
-
-<p>Type 'correct' to validate.</p>
-<form action="javascript:alert( 'success!' );">
-  <div>
-    <input type="text">
-    <input type="submit">
-  </div>
+<form id="target" action="destination.html">
+  <input type="text" value="write your email" id="email">
+  <input type="submit" value="Go">
 </form>
-<span></span>
+
+<div id="other">
+  Trigger the handler
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src='./js/test-s3upload-call.js';></script>
+
+
 
 <script>
-$( "form" ).submit(function( event ) {
-  if ( $( "input" ).first().val() === "correct" ) {
-    $( "span" ).text( "Validated..." ).show();
-    return;
-  }
+  $("#target").submit(function(event) {
 
-  $( "span" ).text( "Not valid!" ).show().fadeOut( 1000 );
-  event.preventDefault();
-});
+    alert(document.getElementById("email").value);
+    s3upload();
+
+    event.preventDefault();
+
+  });
 </script>
 
-</body>
-</html>
+
+
+
+
+
+
+
+//separate learning
+
+1)call on index.html a function s3-upload-call
+2)s3-upload-call calls a back-end function with the keys
+
+(mimics the stripe purchase)
+
+
+//user inputs - DONE
+//clicks submit - DONE
+//alert with input - DONE
+//call s3upload as a function o
+//call s3upload and pass email by value
