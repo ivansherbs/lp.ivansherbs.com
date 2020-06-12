@@ -1,5 +1,9 @@
-function s3upload() {
+function s3upload(formdata) {
 
-  alert("s3upload func was called");
+  console.log("michael");
+
+  $.post("/.netlify/functions/test-s3upload", function(responsedata) {
+    $(".result").html(responsedata);
+  });
 
 }
