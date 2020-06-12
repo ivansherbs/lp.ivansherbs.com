@@ -23,11 +23,9 @@ exports.handler = async (event, context) => {
         ContentType: `application/json`,
       })
       .promise()
-
-    if (error) return { statusCode: 500, body: JSON.stringify(error) }
-
     return { statusCode: 200, body: JSON.stringify(result) }
   } catch (e) {
+    console.error(e);
     return { statusCode: 500, body: e.message }
   }
 }
