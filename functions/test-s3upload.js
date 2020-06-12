@@ -54,7 +54,7 @@ exports.handler = async (event, context) => {
         // The access control
         ACL: "private",
         ContentEncoding: "utf8", // required
-        ContentType: `application/json`,
+        ContentType: "text/html",
       })
       .promise()
     return {
