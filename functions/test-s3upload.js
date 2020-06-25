@@ -1,4 +1,5 @@
-const AWS = require("aws-sdk")
+const AWS = require("aws-sdk");
+const Stripe = require("stripe");
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID,
@@ -25,19 +26,61 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Thanks, but you are already subscribed."
+        message: "Thanks, but you are already subscribed.",
+        error: true
       })
     }
   }
 
+  // append subscriber
   var newSubscriberList = appendSubscriber(formData, subscriberList);
 
-  return saveSubscriberList(newSubscriberList);
+  // uploads to s3 the appended subscriber list
+  var result = await saveSubscriberList(newSubscriberList);
+  if (result.statusCode != 200) {
+    return result;
+  }
+
+  var stripeSession = await createStripeSession(formData);
+  if (!stripeSession) {
+    // TODO: handle stripe session creation failure
+  }
+
+  var body = JSON.parse(result.body);
+  body.sessionId = stripeSession.id;
+  result.body = JSON.stringify(body);
+
+  return result;
 }
 
 
 
 // ----------------------- Functions -----------------------
+
+async function createStripeSession(formData) {
+
+  var stripe = Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: ''
+  });
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card', 'ideal'],
+    line_items: [{
+      price: process.env.STRIPE_PRODUCT_PRICE,
+      quantity: 1,
+    }],
+    mode: 'payment',
+    customer_email: formData.email,
+    billing_address_collection: 'auto',
+    shipping_address_collection: {
+      allowed_countries: ['NL','BE'],
+    },
+    success_url: 'http://localhost:8888/success.html',
+    cancel_url: 'http://localhost:8888/teststyling.html'
+  });
+
+  return session;
+}
 
 // TODO: download s3 subscriber-file
 function getSubscriberList() {
@@ -55,7 +98,8 @@ function getSubscriberList() {
         console.error(err);
         reject({
           statusCode: 200,
-          body: "Sorry, there was an issue with server."
+          body: "Sorry, there was an issue with server.",
+          error: true
         });
         return;
       }
@@ -73,7 +117,6 @@ function getSubscriberList() {
           email: parts[0],
           timestamp: new Date(parts[1])
         });
-        console.log(subscriberList);
       }
 
       resolve(subscriberList);
@@ -160,7 +203,8 @@ function validateFormData(bodyData) {
     return [validatedFormData, {
       statusCode: 200,
       body: JSON.stringify({
-        message: "This email address is too long. Get a life."
+        message: "This email address is too long. Get a life.",
+        error: true
       })
     }]
   }
@@ -170,7 +214,8 @@ function validateFormData(bodyData) {
     return [validatedFormData, {
       statusCode: 200,
       body: JSON.stringify({
-        message: "This email address is not valid."
+        message: "This email address is not valid.",
+        error: true
       })
     }]
   }

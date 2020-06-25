@@ -77,6 +77,10 @@
       <div class="w-form">
         <form id="targetform" action="#" name="email-form" data-name="Email Form"><label for="email">Sign up here:</label><input type="text" class="input w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your email address" id="email"
             required="" /><input type="submit" value="Get Free Sample" data-wait="Please wait..." class="btn w-button" /></form>
+
+            <pre class="result" >
+            </pre>
+
             <script>
               $("#targetform").submit(function(event) {
 
@@ -85,7 +89,6 @@
                 }
 
                 s3upload(data);
-
                 // TODO: call stripe if s3 upload is successful
 
                 event.preventDefault();

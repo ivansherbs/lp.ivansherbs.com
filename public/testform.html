@@ -4,6 +4,7 @@
 <head>
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script src='./js/test-s3upload-call.js' ;></script>
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -13,9 +14,7 @@
     <input type="submit" value="Go">
   </form>
 
-  <pre class="result" >
-    Here you will get the results
-  </pre>
+  <pre class="result"></pre>
 
 
   <script>
@@ -25,12 +24,28 @@
         email: $("#email").val()
       }
 
-      s3upload(data);
+      s3upload(data, function(err, sessionId) {
 
-      // TODO: call stripe if s3 upload is successful
+        if (err) {
+          alert("Went wrong");
+          return;
+        }
+
+        var stripeKey = location.hostname == "localhost" ? "pk_test_okezFrfkIxT5h7IQtCilKrYC" : "pk_live_mokhHcmUCdp0rZyhpNLucmrQ";
+
+        var stripe = Stripe(stripeKey);
+
+        stripe.redirectToCheckout({
+          sessionId: sessionId
+        }).then(function(result) {
+          // TODO:
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer
+          // using `result.error.message`.
+        });
+      });
 
       event.preventDefault();
-
     });
   </script>
 
