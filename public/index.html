@@ -1,8 +1,11 @@
 <!DOCTYPE html><!-- This site was created in Webflow. http://www.webflow.com -->
-<!-- Last Published: Wed Jun 24 2020 11:50:00 GMT+0000 (Coordinated Universal Time) -->
+<!-- Last Published: Fri Jun 26 2020 07:28:33 GMT+0000 (Coordinated Universal Time) -->
 <html data-wf-domain="ivans-herbs.webflow.io" data-wf-page="5ea81451d22216563d8d436c" data-wf-site="5ea8145162c62f196cb4d720" data-wf-status="1">
 
 <head>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script src='./js/test-s3upload-call.js' ;></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <meta charset="utf-8" />
   <title>Contact</title>
   <meta content="The Biznus Template is focused on helping small and medium-sized businesses move their retail shop online.  Get your retail delivery business started with Webflow today." name="description" />
@@ -16,11 +19,7 @@
   <meta content="summary_large_image" name="twitter:card" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <meta content="Webflow" name="generator" />
-  <link href="https://uploads-ssl.webflow.com/5ea8145162c62f196cb4d720/css/ivans-herbs.webflow.d34efb82e.css" rel="stylesheet" type="text/css" />
-
-  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-  <script src='./js/test-s3upload-call.js' ;></script>
-
+  <link href="https://uploads-ssl.webflow.com/5ea8145162c62f196cb4d720/css/ivans-herbs.webflow.3c2519b49.css" rel="stylesheet" type="text/css" />
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">
     WebFont.load({
@@ -75,30 +74,44 @@
       <p class="paragraph-3">To get access to 44 sachets of <strong>Ivan Chai for free</strong>, a herbal tea proven to <strong>improve your prostate health</strong>*, sign up below for our newsletter. <br /><br />That&#x27;s 22 days of treatment
         with herbal tea. <br /><br />You only pay the shipping within the Netherlands (7€).<br /><br />How does it taste? A bit like black tea, but more earthy, and naturally sweet.<br /></p>
       <div class="w-form">
-        <form id="targetform" action="#" name="email-form" data-name="Email Form"><label for="email">Sign up here:</label><input type="text" class="input w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your email address" id="email"
-            required="" /><input type="submit" value="Get Free Sample" data-wait="Please wait..." class="btn w-button" /></form>
-            <script>
-              $("#targetform").submit(function(event) {
+        <form id="email-form" name="email-form" data-name="Email Form" action="#"><label for="email">Sign up here:</label><input type="text" class="input w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your email address"
+            id="email" required="" /><input type="submit" value="Get Free Sample" data-wait="Please wait..." class="btn w-button" /></form>
+        <pre class="result"></pre>
 
-                var data = {
-                  email: $("#email").val()
-                }
+        <script>
+          $("#email-form").submit(function(event) {
 
-                s3upload(data);
+            var data = {
+              email: $("#email").val()
+            }
 
-                // TODO: call stripe if s3 upload is successful
+            s3upload(data, function(err, sessionId) {
 
-                event.preventDefault();
+              var stripeKey = location.hostname == "localhost" ? "pk_test_okezFrfkIxT5h7IQtCilKrYC" : "pk_live_mokhHcmUCdp0rZyhpNLucmrQ";
 
+              var stripe = Stripe(stripeKey);
+
+              stripe.redirectToCheckout({
+                sessionId: sessionId
+              }).then(function(result) {
+                // TODO:
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
               });
-            </script>
+            });
 
+            event.preventDefault();
+          });
+        </script>
+<!--
         <div class="success w-form-done">
           <div>Thank you! Your submission has been received! We&#x27;ll be in touch soon!</div>
         </div>
         <div class="error w-form-fail">
           <div>Oops! Something went wrong while submitting the form.</div>
         </div>
+    -->
       </div>
       <p class="paragraph-2"> *The European Medicines Agency has <strong>approved this herb</strong> to reduce the lower urinary tract symptoms associated with an enlarged prostate.<br /></p>
     </div>
@@ -116,7 +129,7 @@
     </div>
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5ea8145162c62f196cb4d720" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="https://uploads-ssl.webflow.com/5ea8145162c62f196cb4d720/js/webflow.5e1427c76.js" type="text/javascript"></script>
+  <script src="https://uploads-ssl.webflow.com/5ea8145162c62f196cb4d720/js/webflow.c2cfc7209.js" type="text/javascript"></script>
   <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 

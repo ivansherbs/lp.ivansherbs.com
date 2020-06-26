@@ -9,7 +9,7 @@
 
 <body>
 
-  <form id="targetform" action="#">
+  <form id="email-form" action="#">
     <input type="text" value="hello@aol.com" id="email">
     <input type="submit" value="Go">
   </form>
@@ -18,18 +18,13 @@
 
 
   <script>
-    $("#targetform").submit(function(event) {
+    $("#email-form").submit(function(event) {
 
       var data = {
         email: $("#email").val()
       }
 
       s3upload(data, function(err, sessionId) {
-
-        if (err) {
-          alert("Went wrong");
-          return;
-        }
 
         var stripeKey = location.hostname == "localhost" ? "pk_test_okezFrfkIxT5h7IQtCilKrYC" : "pk_live_mokhHcmUCdp0rZyhpNLucmrQ";
 
